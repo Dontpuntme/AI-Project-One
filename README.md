@@ -1,2 +1,2 @@
-# AI Project One
+# AI Projects
  
