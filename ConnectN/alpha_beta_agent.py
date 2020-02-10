@@ -52,46 +52,49 @@ class AlphaBetaAgent(agent.Agent):
         return succ
 
     def getMoveStarter(self, brd, depth):
-        best = (-1, float("-inf"))
+        best = (-1, -1, float("-inf"))
         for node in self.get_successors(brd):
-            move = self.getMove(node, depth, False, float("-inf"), float("inf"))
-            if(move[1] >= best[1]):
+            move = self.getMove(node[0], node[1], depth, True, float("-inf"), float("inf"))
+            if(move[2] >= best[2]):
                 best = move
-        return best[0]
+        return best[1]
 
-    def getMove(self, brd, depth, isMaximizingPlayer, alpha, beta):
+    def getMove(self, brd, col, depth, isMaximizingPlayer, alpha, beta):
         if depth == 0:
-            return (brd[1], self.getValue(brd))
+            #print("TESTING COLUMN: ", col)
+            #brd.print_it()
+            #print("SCORE OF THIS BOARD IS", self.getValue(brd))
+            return (brd, col, self.getValue(brd))
         
         if isMaximizingPlayer:
-            bestVal = (-1, float("-inf"))
-            for node in self.get_successors(brd[0]):
-                move = self.getMove(node, depth-1, False, alpha, beta)[0]
-                if move[1]>=bestVal[1]:
+            bestVal = (-1, -1, float("-inf"))
+            for node in self.get_successors(brd):
+                move = self.getMove(node[0], node[1], depth-1, False, alpha, beta)
+                if move[2] >= bestVal[2]:
                     bestVal = move
-                alpha = max( alpha, bestVal[1])
+                alpha = max(alpha, bestVal[2])
                 if beta <= alpha:
                     break
             return bestVal
     
         else :
-            bestVal = (-1, float("inf"))
-            for node in self.get_successors(brd[0]):
-                move = self.getMove(node, depth-1, True, alpha, beta)
-                if move[1] <= bestVal[1]:
+            bestVal = (-1, -1, float("inf"))
+            for node in self.get_successors(brd):
+                move = self.getMove(node[0], node[1], depth-1, True, alpha, beta)
+                if move[2] <= bestVal[2]:
                     bestVal = move
-                beta = min( beta, bestVal[1])
+                beta = min(beta, bestVal[2])
                 if beta <= alpha:
                     break
-            return bestVal, 
+            return bestVal 
         
         
     def getValue(self, brd):
-        if brd[0].get_outcome() == 2:
+        if brd.get_outcome() == 2:
             return 1000
-        if brd[0].get_outcome() == 1:
-            return -10000
-        if brd[0].get_outcome() == 0:
+        if brd.get_outcome() == 1:
+            return -1000
+        if brd.get_outcome() == 0:
             return 0
 #Thomas Alpha Beta and 3 in a row counting.
 #David most sets of N
