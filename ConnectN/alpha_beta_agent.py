@@ -25,7 +25,7 @@ class AlphaBetaAgent(agent.Agent):
     # NOTE: make sure the column is legal, or you'll lose the game.
     def go(self, brd):
         """Search for the best move (choice of column for the token)"""
-        self.getMoveStarter(brd, self.max_depth)
+        return self.getMoveStarter(brd, self.max_depth)
         
     # Get the successors of the given board.
     # PARAM [board.Board] brd: the board state
@@ -52,21 +52,21 @@ class AlphaBetaAgent(agent.Agent):
         return succ
 
     def getMoveStarter(self, brd, depth):
-        best = [-1, float("-inf")]
+        best = (-1, float("-inf"))
         for node in self.get_successors(brd):
-            move = self.getMove(node, depth, True, float("-inf"), float("inf"))
+            move = self.getMove(node, depth, False, float("-inf"), float("inf"))
             if(move[1] >= best[1]):
                 best = move
-        return best
+        return best[0]
 
     def getMove(self, brd, depth, isMaximizingPlayer, alpha, beta):
         if depth == 0:
-            return [brd[1], self.getValue(brd)]
+            return (brd[1], self.getValue(brd))
         
         if isMaximizingPlayer:
-            bestVal = [-1, float("-inf")]
+            bestVal = (-1, float("-inf"))
             for node in self.get_successors(brd[0]):
-                move = self.getMove(node, depth-1, False, alpha, beta)
+                move = self.getMove(node, depth-1, False, alpha, beta)[0]
                 if move[1]>=bestVal[1]:
                     bestVal = move
                 alpha = max( alpha, bestVal[1])
@@ -75,7 +75,7 @@ class AlphaBetaAgent(agent.Agent):
             return bestVal
     
         else :
-            bestVal = [-1, float("inf")]
+            bestVal = (-1, float("inf"))
             for node in self.get_successors(brd[0]):
                 move = self.getMove(node, depth-1, True, alpha, beta)
                 if move[1] <= bestVal[1]:
@@ -87,9 +87,9 @@ class AlphaBetaAgent(agent.Agent):
         
         
     def getValue(self, brd):
-        if brd[0].get_outcome() == 1:
-            return 10000
         if brd[0].get_outcome() == 2:
+            return 1000
+        if brd[0].get_outcome() == 1:
             return -10000
         if brd[0].get_outcome() == 0:
             return 0
