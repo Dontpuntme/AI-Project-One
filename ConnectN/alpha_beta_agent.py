@@ -25,10 +25,9 @@ class AlphaBetaAgent(agent.Agent):
     # NOTE: make sure the column is legal, or you'll lose the game.
     def go(self, brd):
         """Search for the best move (choice of column for the token)"""
-        # Your code here
-
+        
+        
     # Get the successors of the given board.
-    #
     # PARAM [board.Board] brd: the board state
     # RETURN [list of (board.Board, int)]: a list of the successor boards,
     #                                      along with the column where the last
@@ -51,3 +50,35 @@ class AlphaBetaAgent(agent.Agent):
             # Add board to list of successors
             succ.append((nb,col))
         return succ
+
+
+    def getMove(brd, depth, isMaximizingPlayer, alpha, beta):
+        if depth == 0:
+            return brd.getValue()
+        
+        if isMaximizingPlayer:
+            bestVal = float("-inf")
+            for node in brd.get_successors():
+                value = getMove(node, depth-1, False, alpha, beta)
+                bestVal = max( bestVal, value) 
+                alpha = max( alpha, bestVal)
+                if beta <= alpha:
+                    break
+            return bestVal
+    
+        else :
+            bestVal = float("inf")
+            for node in brd.get_successors():
+                value = getMove(node, depth-1, True, alpha, beta)
+                bestVal = min( bestVal, value) 
+                beta = min( beta, bestVal)
+                if beta <= alpha:
+                    break
+            return bestVal
+        
+        
+    def getValue()
+#Thomas Alpha Beta and 3 in a row counting.
+#David most sets of N
+
+    

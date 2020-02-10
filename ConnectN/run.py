@@ -18,11 +18,11 @@ g = game.Game(7, # width
 #
 # Human vs. Random
 #
-# g = game.Game(7, # width
-#               6, # height
-#               4, # tokens in a row to win
-#               agent.InteractiveAgent("human"),    # player 1
-#               agent.RandomAgent("random"))        # player 2
+g = game.Game(7, # width
+              6, # height
+              4, # tokens in a row to win
+              agent.InteractiveAgent("human"),    # player 1
+              agent.RandomAgent("random"))        # player 2
 
 #
 # Random vs. AlphaBeta
