@@ -25,7 +25,7 @@ class AlphaBetaAgent(agent.Agent):
     # NOTE: make sure the column is legal, or you'll lose the game.
     def go(self, brd):
         """Search for the best move (choice of column for the token)"""
-        
+        self.getMoveStarter(brd, self.max_depth)
         
     # Get the successors of the given board.
     # PARAM [board.Board] brd: the board state
@@ -51,33 +51,48 @@ class AlphaBetaAgent(agent.Agent):
             succ.append((nb,col))
         return succ
 
+    def getMoveStarter(self, brd, depth):
+        best = [-1, float("-inf")]
+        for node in self.get_successors(brd):
+            move = self.getMove(node, depth, True, float("-inf"), float("inf"))
+            if(move[1] >= best[1]):
+                best = move
+        return best
 
-    def getMove(brd, depth, isMaximizingPlayer, alpha, beta):
+    def getMove(self, brd, depth, isMaximizingPlayer, alpha, beta):
         if depth == 0:
-            return brd.getValue()
+            return [brd[1], self.getValue(brd)]
         
         if isMaximizingPlayer:
-            bestVal = float("-inf")
-            for node in brd.get_successors():
-                value = getMove(node, depth-1, False, alpha, beta)
-                bestVal = max( bestVal, value) 
-                alpha = max( alpha, bestVal)
+            bestVal = [-1, float("-inf")]
+            for node in self.get_successors(brd[0]):
+                move = self.getMove(node, depth-1, False, alpha, beta)
+                if move[1]>=bestVal[1]:
+                    bestVal = move
+                alpha = max( alpha, bestVal[1])
                 if beta <= alpha:
                     break
             return bestVal
     
         else :
-            bestVal = float("inf")
-            for node in brd.get_successors():
-                value = getMove(node, depth-1, True, alpha, beta)
-                bestVal = min( bestVal, value) 
-                beta = min( beta, bestVal)
+            bestVal = [-1, float("inf")]
+            for node in self.get_successors(brd[0]):
+                move = self.getMove(node, depth-1, True, alpha, beta)
+                if move[1] <= bestVal[1]:
+                    bestVal = move
+                beta = min( beta, bestVal[1])
                 if beta <= alpha:
                     break
-            return bestVal
+            return bestVal, 
         
         
-    def getValue()
+    def getValue(self, brd):
+        if brd[0].get_outcome() == 1:
+            return 10000
+        if brd[0].get_outcome() == 2:
+            return -10000
+        if brd[0].get_outcome() == 0:
+            return 0
 #Thomas Alpha Beta and 3 in a row counting.
 #David most sets of N
 
