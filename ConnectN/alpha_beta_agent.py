@@ -25,7 +25,7 @@ class AlphaBetaAgent(agent.Agent):
     # NOTE: make sure the column is legal, or you'll lose the game.
     def go(self, brd):
         """Search for the best move (choice of column for the token)"""
-        return self.getMoveStarter(brd, self.max_depth)
+        return self.getMove(brd,3,self.max_depth,True,-1000000000,1000000000)[1]
         
     # Get the successors of the given board.
     # PARAM [board.Board] brd: the board state
@@ -51,42 +51,47 @@ class AlphaBetaAgent(agent.Agent):
             succ.append((nb,col))
         return succ
 
-    def getMoveStarter(self, brd, depth):
-        best = (-1, -1, float("-inf"))
-        for node in self.get_successors(brd):
-            move = self.getMove(node[0], node[1], depth, True, float("-inf"), float("inf"))
-            if(move[2] >= best[2]):
-                best = move
-        return best[1]
 
     def getMove(self, brd, col, depth, isMaximizingPlayer, alpha, beta):
         if depth == 0:
-            #print("TESTING COLUMN: ", col)
-            #brd.print_it()
-            #print("SCORE OF THIS BOARD IS", self.getValue(brd))
+# =============================================================================
+#             print("TESTING COLUMN: ", col)
+#             brd.print_it()
+#             print("SCORE OF THIS BOARD IS", self.getValue(brd))
+# =============================================================================
             return (brd, col, self.getValue(brd))
-        
-        if isMaximizingPlayer:
-            bestVal = (-1, -1, float("-inf"))
+        elif isMaximizingPlayer:
+            bestVal = (brd,col, -1000000000)
+            bestValList=list(bestVal)
             for node in self.get_successors(brd):
-                move = self.getMove(node[0], node[1], depth-1, False, alpha, beta)
-                if move[2] >= bestVal[2]:
-                    bestVal = move
-                alpha = max(alpha, bestVal[2])
-                if beta <= alpha:
-                    break
-            return bestVal
+                #                   board    col     depth     IsMaximizing     
+                MoveTuple=self.getMove(node[0], node[1], depth-1, False, alpha, beta)
+                if MoveTuple[2]>bestValList[2]:
+                    bestValList[0]=node[0]
+                    bestValList[1]=node[1]
+                    bestValList[2]=MoveTuple[2]        
+                    print("called")
+                    print(bestValList[2])
+                if bestValList[2]>=beta :
+                    return bestValList
+                alpha = max(alpha, bestValList[2])
+               
+            return bestValList
     
         else :
-            bestVal = (-1, -1, float("inf"))
+            bestVal = (brd,col, 1000000000)
+            bestValList=list(bestVal)
             for node in self.get_successors(brd):
-                move = self.getMove(node[0], node[1], depth-1, True, alpha, beta)
-                if move[2] <= bestVal[2]:
-                    bestVal = move
-                beta = min(beta, bestVal[2])
-                if beta <= alpha:
-                    break
-            return bestVal 
+                MoveTuple=self.getMove(node[0], node[1], depth-1, True, alpha, beta)
+                if MoveTuple[2]<bestValList[2]:
+                    bestValList[0]=node[0]
+                    bestValList[1]=node[1]
+                    bestValList[2]=MoveTuple[2]
+                if bestValList[2]<=alpha :
+                    return bestValList
+                beta = min(beta, bestValList[2]) 
+
+            return bestValList
         
         
     def getValue(self, brd):
