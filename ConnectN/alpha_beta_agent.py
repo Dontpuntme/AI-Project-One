@@ -75,11 +75,8 @@ class AlphaBetaAgent(agent.Agent):
 #             brd.print_it()
 #             print("SCORE OF THIS BOARD IS", self.getValue(brd))
 # =============================================================================
-            centerBias = (brd.w/2 - abs(col - brd.w/2))
-            if isMaximizingPlayer:
-                centerBias*-1
-            value = (depth + 1)*self.getValue(brd,player)+10*centerBias
-            print(str(value)+" "+str(col))
+            value = (depth + 1)*self.getValue(brd,player)
+           # print(str(value)+" "+str(col))
             return (brd, col, value)
         elif isMaximizingPlayer:
             bestValList = list((brd, col, -1000000000))
@@ -116,12 +113,12 @@ class AlphaBetaAgent(agent.Agent):
         
         
     def getValue(self,brd,player):
-        if brd.get_outcome() == 2:
+        if brd.get_outcome() == player:
             return 1000
-        if brd.get_outcome() == 1:
+        if brd.get_outcome() !=0 and brd.get_outcome() !=player:
             return -1000
         else:
-           return 0
+           return self.centerPiecePreference(brd,player)
        #self.num_threes(brd,player)
        
     def is_three_at(self,brd, x, y, dx, dy, player):
@@ -159,7 +156,16 @@ class AlphaBetaAgent(agent.Agent):
                 if (brd.board[y][x] != 0):
                     total+=self.num_threes_at(brd,x,y,player)
         return total
-
+    def centerPiecePreference(self,brd,player):
+        centerBias=0
+        for x in range(brd.w):
+            for y in range(brd.h):
+                if (brd.board[y][x] != 0):
+                    if(brd.board[y][x]==player):
+                        centerBias += (brd.w/2 - abs(x - brd.w/2))
+                    else:
+                        centerBias -= (brd.w/2 - abs(x - brd.w/2))
+        return centerBias
         
 # =============================================================================
 #         return brd.numThrees
