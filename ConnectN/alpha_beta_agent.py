@@ -50,6 +50,8 @@ class AlphaBetaAgent(agent.Agent):
             # Add board to list of successors
             succ.append((nb,col))
         return succ
+  
+    
     def what_player(self,brd):
         total = 0
         for x in range(brd.w):
@@ -67,24 +69,21 @@ class AlphaBetaAgent(agent.Agent):
 
 
     def getMove(self, brd, col, depth, isMaximizingPlayer, alpha, beta,player):
-        if depth == 0:
+        if depth == 0 or brd.get_outcome() != 0:
 # =============================================================================
 #             print("TESTING COLUMN: ", col)
 #             brd.print_it()
 #             print("SCORE OF THIS BOARD IS", self.getValue(brd))
 # =============================================================================
-            return (brd, col, self.getValue(brd,player))
+            centerBias = (brd.w/2 - abs(col - brd.w/2))
+            if isMaximizingPlayer:
+                centerBias*-1
+            value = (depth + 1)*self.getValue(brd,player)+10*centerBias
+            print(str(value)+" "+str(col))
+            return (brd, col, value)
         elif isMaximizingPlayer:
-            bestVal = (brd,col, -1000000000)
-            bestValList=list(bestVal)
+            bestValList = list((brd, col, -1000000000))
             for node in self.get_successors(brd):
-# =============================================================================
-#                 if node[0].get_outcome==2:
-#                     bestValList[0]=node[0]
-#                     bestValList[1]=node[1]
-#                     bestValList[2]=1000       
-#                     return bestValList
-# =============================================================================
                 #                   board    col     depth     IsMaximizing
                 MoveTuple=self.getMove(node[0], node[1], depth-1, False, alpha, beta,player)
                 if MoveTuple[2]>bestValList[2]:
@@ -102,16 +101,8 @@ class AlphaBetaAgent(agent.Agent):
             return bestValList
     
         else :
-            bestVal = (brd,col, 1000000000)
-            bestValList=list(bestVal)
+            bestValList = list((brd,col, 1000000000))
             for node in self.get_successors(brd):
-# =============================================================================
-#                 if node[0].get_outcome==1:
-#                     bestValList[0]=node[0]
-#                     bestValList[1]=node[1]
-#                     bestValList[2]=-1000       
-#                     return bestValList
-# =============================================================================
                 MoveTuple=self.getMove(node[0], node[1], depth-1, True, alpha, beta,player)
                 if MoveTuple[2]<bestValList[2]:
                     bestValList[0]=node[0]
@@ -130,7 +121,8 @@ class AlphaBetaAgent(agent.Agent):
         if brd.get_outcome() == 1:
             return -1000
         else:
-           return self.num_threes(brd,player)
+           return 0
+       #self.num_threes(brd,player)
        
     def is_three_at(self,brd, x, y, dx, dy, player):
         """Return True if a line of identical tokens exists starting at (x,y) in direction (dx,dy)"""
