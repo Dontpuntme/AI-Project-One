@@ -12,10 +12,14 @@ class AlphaBetaAgent(agent.Agent):
     #
     # PARAM [string] name:      the name of this player
     # PARAM [int]    max_depth: the maximum search depth
-    def __init__(self, name, max_depth):
+    def __init__(self, name, max_depth, centerMultiplier = 1, threesMultiplier = 1):
         super().__init__(name)
         # Max search depth
         self.max_depth = max_depth
+        self.centerMultiplier = centerMultiplier
+        self.threesMultiplier = threesMultiplier
+        print(centerMultiplier)
+        print(threesMultiplier)
 
     # Pick a column.
     #
