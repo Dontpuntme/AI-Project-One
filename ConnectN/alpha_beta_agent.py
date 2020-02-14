@@ -25,7 +25,8 @@ class AlphaBetaAgent(agent.Agent):
     # NOTE: make sure the column is legal, or you'll lose the game.
     def go(self, brd):
         """Search for the best move (choice of column for the token)"""
-        return self.getMove(brd,3,self.max_depth,True,-1000000000,1000000000,self.what_player(brd))[1]
+        freecols = brd.free_cols()
+        return self.getMove(brd,freecols[0],self.max_depth,True,-1000000000,1000000000,self.what_player(brd))[1]
         
     # Get the successors of the given board.
     # PARAM [board.Board] brd: the board state
@@ -118,7 +119,7 @@ class AlphaBetaAgent(agent.Agent):
         if brd.get_outcome() !=0 and brd.get_outcome() !=player:
             return -1000
         else:
-           return self.centerPiecePreference(brd,player)
+           return self.centerPiecePreference(brd,player)+self.num_threes(brd,player)
        #self.num_threes(brd,player)
        
     def is_three_at(self,brd, x, y, dx, dy, player):
@@ -163,8 +164,10 @@ class AlphaBetaAgent(agent.Agent):
                 if (brd.board[y][x] != 0):
                     if(brd.board[y][x]==player):
                         centerBias += (brd.w/2 - abs(x - brd.w/2))
+                        centerBias += (brd.h/2 - abs(y - brd.h/2))
                     else:
                         centerBias -= (brd.w/2 - abs(x - brd.w/2))
+                        centerBias += (brd.h/2 - abs(y - brd.h/2))
         return centerBias
         
 # =============================================================================

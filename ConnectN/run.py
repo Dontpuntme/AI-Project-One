@@ -39,7 +39,8 @@ random.seed(1)
 g = game.Game(7, # width
               6, # height
               4, # tokens in a row to win
-              aba.AlphaBetaAgent("alphabeta",4),       # player 1
+              #agent.InteractiveAgent("human"),     
+              aba.AlphaBetaAgent("alphabetaOne",6),# player 1
               aba.AlphaBetaAgent("alphabetaTwo",4)) # player 2
 
 #
