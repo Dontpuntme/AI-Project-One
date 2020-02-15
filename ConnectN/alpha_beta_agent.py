@@ -164,7 +164,7 @@ class AlphaBetaAgent(agent.Agent):
                         centerBias += (brd.h/2 - abs(y - brd.h/2))
                     else:
                         centerBias -= (brd.w/2 - abs(x - brd.w/2))
-                        centerBias += (brd.h/2 - abs(y - brd.h/2))
+                        centerBias -= (brd.h/2 - abs(y - brd.h/2))
         return centerBias
         
 
