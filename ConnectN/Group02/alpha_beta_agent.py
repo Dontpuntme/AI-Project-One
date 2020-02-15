@@ -18,8 +18,6 @@ class AlphaBetaAgent(agent.Agent):
         self.max_depth = max_depth
         self.centerMultiplier = centerMultiplier
         self.threesMultiplier = threesMultiplier
-        print(centerMultiplier)
-        print(threesMultiplier)
 
     # Pick a column.
     #
@@ -115,7 +113,7 @@ class AlphaBetaAgent(agent.Agent):
         if brd.get_outcome() !=0 and brd.get_outcome() !=player:
             return -10000
         else:
-           return (self.centerMultiplier*self.centerPiecePreference(brd,player))#+(self.threesMultiplier*self.num_threes(brd,player))
+           return (self.centerMultiplier*self.centerPiecePreference(brd,player))+(self.threesMultiplier*self.num_threes(brd,player))
        #self.num_threes(brd,player)
        
     def is_three_at(self,brd, x, y, dx, dy, player):
@@ -167,6 +165,6 @@ class AlphaBetaAgent(agent.Agent):
                         centerBias += (brd.h/2 - abs(y - brd.h/2))
         return centerBias
         
-
+THE_AGENT = AlphaBetaAgent("Group02",6,1)
 
     
