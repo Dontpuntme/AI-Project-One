@@ -116,7 +116,7 @@ class AlphaBetaAgent(agent.Agent):
            return (self.centerMultiplier*self.centerPiecePreference(brd,player))+(self.threesMultiplier*self.num_threes(brd,player))
        #self.num_threes(brd,player)
        
-    def is_three_at(self,brd, x, y, dx, dy, player):
+"""  def is_three_at(self,brd, x, y, dx, dy, player):
         #returns a positive one of there is a set of threes connected to the players token a negative value if it's the other players token
         # Avoid out-of-bounds errors
         if ((x + (4-1) * dx >= brd.w) or
@@ -136,8 +136,8 @@ class AlphaBetaAgent(agent.Agent):
         elif total>1 and player!=t:
             return -1
         else:
-            return 0
-    def num_threes_at(self,brd,x, y,player):
+            return 0"""
+ """   def num_threes_at(self,brd,x, y,player):
         #Returns if there is a set of three tokens at an x,y cordinate
         return (self.is_three_at(brd,x, y, 1, 0, player) + # Horizontal
                 self.is_three_at(brd,x, y, 0, 1, player) + # Vertical
@@ -150,7 +150,7 @@ class AlphaBetaAgent(agent.Agent):
             for y in range(brd.h):
                 if (brd.board[y][x] != 0):
                     total+=self.num_threes_at(brd,x,y,player)
-        return total
+        return total"""
     #Goes through a board state and subtracts or adds to the value of the board state based on how close pieces are to the center
     def centerPiecePreference(self,brd,player):
         centerBias=0
