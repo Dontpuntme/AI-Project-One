@@ -8,7 +8,7 @@ from colorama import Fore, Back
 class InteractiveCharacter(CharacterEntity):
 
     def do(self, wrld):
-        # Commands
+        # Commannds
         dx, dy = 0, 0
         bomb = False
         # Handle input
@@ -27,3 +27,4 @@ class InteractiveCharacter(CharacterEntity):
         self.move(dx, dy)
         if bomb:
             self.place_bomb()
+    

@@ -1,0 +1,1 @@
+Try doing expectimax for the monster and ignoring it
