@@ -1,4 +1,4 @@
-# This is necessary to find the main code
+en# This is necessary to find the main code
 import sys
 sys.path.insert(0, '../bomberman')
 # Import necessary stuff
