@@ -151,7 +151,7 @@ class AStarBoy(CharacterEntity):
                 if (bomby >=0) and (bomby < wrld.height()):
                     if not wrld.wall_at(bombx+dx, bomby):
                         if(thex==(bombx+dx) and they==(bomby)):
-                            if(bombTimer < 4):
+                            if(bombTimer < 3):
                                 return -bombTimer
                             else:
                                 return -1000
@@ -161,7 +161,7 @@ class AStarBoy(CharacterEntity):
                 if (bomby+dy >=0) and (bomby+dy < wrld.height()):
                     if not wrld.wall_at(bombx, bomby+dy):
                         if(thex==(bombx) and they==(bomby+dy)):
-                            if(bombTimer < 4):
+                            if(bombTimer < 3):
                                 return -bombTimer
                             else:
                                 return -1000
