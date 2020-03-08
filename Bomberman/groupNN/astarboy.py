@@ -64,7 +64,13 @@ class AStarBoy(CharacterEntity):
                                     
         
     
-    
+    def wallNextToMe(self,thex,they,wrld):
+        for dx in [-1, 0, 1]:
+            if (thex+dx >=0) and (thex+dx < wrld.width()):
+                if wrld.wall_at(thex+dx, they):
+                    return True
+        return False
+        
     def getEnemyValue(self,thex,they,wrld):
         enemyX = -1
         enemyY = -1
@@ -75,6 +81,21 @@ class AStarBoy(CharacterEntity):
                    enemyY = y
         if(enemyX == -1):
             return 0
+        elif(self.wallNextToMe(thex,they,wrld)):
+            for dx in [-7,-6,-5,-4,-3,-2,-1, 0, 1,2,3,4,5,6,7]:
+                for dy  in [-7,-6,-5,-4,-3,-2,-1, 0, 1,2,3,4,5,6,7]:
+                    if (enemyY+dy >=0) and (enemyY+dy < wrld.height()):
+                            if (enemyX+dx >=0) and (enemyX+dx < wrld.width()):
+                                        if(thex==(enemyX+dx) and they==(enemyY+dy)):
+                                            wall = False
+                                            for wallX in range(0, dx):
+                                                if wrld.wall_at(enemyX+wallX, enemyY):
+                                                        wall = True
+                                                for wallY in range(0, dy):
+                                                    if wrld.wall_at(enemyX, enemyY+wallY):
+                                                        wall = True
+                                            if(not wall):        
+                                                return -500 + 20*self.h([thex, they],[enemyX, enemyY])            
         else:
             for dx in [-4,-3,-2,-1, 0, 1,2,3,4]:
                 for dy in [-4,-3,-2,-1, 0, 1,2,3,4]:
