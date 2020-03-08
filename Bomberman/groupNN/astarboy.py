@@ -65,7 +65,7 @@ class AStarBoy(CharacterEntity):
         
     
     def wallNextToMe(self,thex,they,wrld):
-        for dx in [-1, 0, 1]:
+        for dx in [-5,-4,-3,-2,-1, 0, 1,2,3,4,5]:
             if (thex+dx >=0) and (thex+dx < wrld.width()):
                 if wrld.wall_at(thex+dx, they):
                     return True
@@ -83,7 +83,7 @@ class AStarBoy(CharacterEntity):
             return 0
         elif(self.wallNextToMe(thex,they,wrld)):
             for dx in [-7,-6,-5,-4,-3,-2,-1, 0, 1,2,3,4,5,6,7]:
-                for dy  in [-7,-6,-5,-4,-3,-2,-1, 0, 1,2,3,4,5,6,7]:
+                for dy  in [-5,-4,-3,-2,-1, 0, 1,2,3,4,5]:
                     if (enemyY+dy >=0) and (enemyY+dy < wrld.height()):
                             if (enemyX+dx >=0) and (enemyX+dx < wrld.width()):
                                         if(thex==(enemyX+dx) and they==(enemyY+dy)):
