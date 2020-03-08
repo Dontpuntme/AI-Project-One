@@ -97,8 +97,8 @@ class AStarBoy(CharacterEntity):
                                             if(not wall):        
                                                 return -500 + 20*self.h([thex, they],[enemyX, enemyY])            
         else:
-            for dx in [-4,-3,-2,-1, 0, 1,2,3,4]:
-                for dy in [-4,-3,-2,-1, 0, 1,2,3,4]:
+            for dx in [-5,-4,-3,-2,-1, 0, 1,2,3,4,5]:
+                for dy in [-5,-4,-3,-2,-1, 0, 1,2,3,4,5]:
                     if (enemyY+dy >=0) and (enemyY+dy < wrld.height()):
                             if (enemyX+dx >=0) and (enemyX+dx < wrld.width()):
                                         if(thex==(enemyX+dx) and they==(enemyY+dy)):
@@ -139,7 +139,7 @@ class AStarBoy(CharacterEntity):
         bombx=0
         bomby=0
         if(wrld.explosion_at(thex,they)):
-            return -1000      
+            return -10000
         for x in range(0, wrld.width()):
            for y in range(0, wrld.height()):
                 if(wrld.bomb_at(x, y)):
@@ -154,7 +154,7 @@ class AStarBoy(CharacterEntity):
                             if(bombTimer < 4):
                                 return -bombTimer
                             else:
-                                return -1000
+                                return -10000
                             
         for dy in [-4,-3,-2,-1, 0, 1,2,3,4]:
             if (bombx >=0) and (bombx < wrld.width()):
@@ -164,7 +164,7 @@ class AStarBoy(CharacterEntity):
                             if(bombTimer < 4):
                                 return -bombTimer
                             else:
-                                return -1000
+                                return -10000
                                 # TODO: do something with newworld and events
         return 0
     def isBomb(self,wrld):
