@@ -9,13 +9,13 @@ from game import Game
 # TODO This is your code!
 sys.path.insert(1, '../groupNN')
 from testcharacter import TestCharacter
-from astarboy import AStarBoy
+from scenarioplayertwo import ScenarioPlayerTwo
 
 # Create the game
 g = Game.fromfile('map.txt')
 
 # TODO Add your character
-g.add_character(AStarBoy("me", # name
+g.add_character(ScenarioPlayerTwo("me", # name
                               "C",  # avatar
                               0, 0  # position
 ))

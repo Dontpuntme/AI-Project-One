@@ -11,7 +11,7 @@ sys.path.insert(1, '../groupNN')
 
 # Uncomment this if you want the empty test character
 from testcharacter import TestCharacter
-from astarboy import AStarBoy
+from scenarioplayerone import ScenarioPlayerOne
  
 
 # Uncomment this if you want the interactive character
@@ -23,7 +23,7 @@ g = Game.fromfile('map.txt')
 # TODO Add your character
 
 # Uncomment this if you want the test character
-g.add_character(AStarBoy("me", # name
+g.add_character(ScenarioPlayerOne("me", # name
                                "C",  # avatar
                                0, 0  # position
                                ))

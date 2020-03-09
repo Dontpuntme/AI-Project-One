@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 # This is necessary to find the main code
 import sys
 sys.path.insert(0, '../bomberman')
@@ -10,9 +12,9 @@ from colorama import Fore, Back
 from node import Node
 
 from sensed_world import SensedWorld
-bombTimer = 0
+bombTimer = 12
 
-class AStarBoy(CharacterEntity):
+class ScenarioPlayerTwo(CharacterEntity):
     
     def do(self, wrld):
         # Your code here
@@ -54,7 +56,7 @@ class AStarBoy(CharacterEntity):
                                 PathLength= self.getPath(characterX,characterY,wrld)
                                 BombValue = self.inBombPath(characterX,characterY,wrld)
                                 enemyValue = self.getEnemyValue(characterX,characterY,wrld)
-                                Astar = -2*PathLength + BombValue + enemyValue
+                                Astar = -3*PathLength + BombValue + enemyValue
                                 
                                 if Astar>BestMove[0]:
                                     BestMove[0]=Astar
@@ -72,46 +74,52 @@ class AStarBoy(CharacterEntity):
         return False
         
     def getEnemyValue(self,thex,they,wrld):
-        enemyX = -1
-        enemyY = -1
+        total = 0
+        monsterArray=[]
+        
         for x in range(0, wrld.width()):
            for y in range(0, wrld.height()):
                if(wrld.monsters_at(x,y)!=None):
-                   enemyX = x
-                   enemyY = y
-        if(enemyX == -1):
+                   monsterArray.append([x,y])
+        if(len(monsterArray)==0):
             return 0
-        elif(self.wallNextToMe(thex,they,wrld)):
-            for dx in [-7,-6,-5,-4,-3,-2,-1, 0, 1,2,3,4,5,6,7]:
-                for dy  in [-5,-4,-3,-2,-1, 0, 1,2,3,4,5]:
-                    if (enemyY+dy >=0) and (enemyY+dy < wrld.height()):
-                            if (enemyX+dx >=0) and (enemyX+dx < wrld.width()):
-                                        if(thex==(enemyX+dx) and they==(enemyY+dy)):
-                                            wall = False
-                                            for wallX in range(0, dx):
-                                                if wrld.wall_at(enemyX+wallX, enemyY):
-                                                        wall = True
-                                                for wallY in range(0, dy):
-                                                    if wrld.wall_at(enemyX, enemyY+wallY):
-                                                        wall = True
-                                            if(not wall):        
-                                                return -500 + 20*self.h([thex, they],[enemyX, enemyY])            
-        else:
-            for dx in [-5,-4,-3,-2,-1, 0, 1,2,3,4,5]:
-                for dy in [-5,-4,-3,-2,-1, 0, 1,2,3,4,5]:
-                    if (enemyY+dy >=0) and (enemyY+dy < wrld.height()):
-                            if (enemyX+dx >=0) and (enemyX+dx < wrld.width()):
-                                        if(thex==(enemyX+dx) and they==(enemyY+dy)):
-                                            wall = False
-                                            for wallX in range(0, dx):
-                                                if wrld.wall_at(enemyX+wallX, enemyY):
-                                                        wall = True
-                                                for wallY in range(0, dy):
-                                                    if wrld.wall_at(enemyX, enemyY+wallY):
-                                                        wall = True
-                                            if(not wall):        
-                                                return -500 + 20*self.h([thex, they],[enemyX, enemyY])
-        return 1.8*self.h([thex, they],[enemyX, enemyY])
+        if(they>=14):
+            return total + abs(thex-monsterArray[0][0]) + abs(they-monsterArray[0][1])
+        for monster in monsterArray:
+            if(self.wallNextToMe(thex,they,wrld)):
+                for dx in [-7,-6,-5,-4,-3,-2,-1, 0, 1,2,3,4,5,6,7]:
+                    for dy  in [-5,-4,-3,-2,-1, 0, 1,2,3,4,5]:
+                        if (monster[1]+dy >=0) and (monster[1]+dy < wrld.height()):
+                                if (monster[0]+dx >=0) and (monster[0]+dx < wrld.width()):
+                                    if(thex==(monster[0]+dx) and they==(monster[1]+dy)):
+                                        wall = False
+                                        for wallX in range(0, dx):
+                                            if wrld.wall_at(monster[0]+wallX, monster[1]):
+                                                wall = True
+                                        for wallY in range(0, dy):
+                                            if wrld.wall_at(monster[0], monster[1]+wallY):
+                                                wall = True
+                                        if(not wall):        
+                                                total+= -1000 + 20*self.h([thex, they],[monster[0],monster[1]])
+                        
+            else:
+                for dx in [-5,-4,-3,-2,-1, 0, 1,2,3,4,5]:
+                    for dy in [-5,-4,-3,-2,-1, 0, 1,2,3,4,5]:
+                        if (monster[1]+dy >=0) and (monster[1]+dy < wrld.height()):
+                            if (monster[0]+dx >=0) and (monster[0]+dx < wrld.width()):
+                                if(thex==(monster[0]+dx) and they==(monster[1]+dy)):
+                                    wall = False
+                                    for wallX in range(0, dx):
+                                        if wrld.wall_at(monster[0]+wallX, monster[1]):
+                                            wall = True
+                                    for wallY in range(0, dy):
+                                        if wrld.wall_at(monster[0], monster[1]+wallY):
+                                            wall = True
+                                    if(not wall):        
+                                        total+= -1000 + 20*self.h([thex, they],[monster[0],monster[1]])
+        
+        return total + abs(thex-monsterArray[0][0])*10 + abs(they-monsterArray[0][1])
+        
                             
        
                                 # TODO: do something with newworld and events
@@ -154,7 +162,7 @@ class AStarBoy(CharacterEntity):
                             if(bombTimer < 4):
                                 return -bombTimer
                             else:
-                                return -10000
+                                return -1000
                             
         for dy in [-4,-3,-2,-1, 0, 1,2,3,4]:
             if (bombx >=0) and (bombx < wrld.width()):
@@ -164,7 +172,7 @@ class AStarBoy(CharacterEntity):
                             if(bombTimer < 4):
                                 return -bombTimer
                             else:
-                                return -10000
+                                return -1000
                                 # TODO: do something with newworld and events
         return 0
     def isBomb(self,wrld):
@@ -174,6 +182,7 @@ class AStarBoy(CharacterEntity):
                     return True
         return False
     def bombPlacement(self,wrld):
+        global bombTimer
         if (self.isBomb(wrld)!=True):
             if self.y == 0:
                 return False
@@ -193,13 +202,16 @@ class AStarBoy(CharacterEntity):
                 if (bombx+dx >=0) and (bombx+dx < wrld.width()):
                     if (bomby >=0) and (bomby < wrld.height()):
                         if wrld.wall_at(bombx+dx, bomby) and bombx+bomby+dx>=bombx+edgex+bomby+edgey:
-                            return True
+                            if bombTimer>12:
+                                return True
+
                             
             for dy in [-4,-3,-2,-1, 0, 1,2,3,4]:
                 if (bombx >=0) and (bombx < wrld.width()):
                     if (bomby+dy >=0) and (bomby+dy < wrld.height()):
                         # No need to check impossible moves
                         if wrld.wall_at(bombx, bomby+dy) and bombx+bomby+dy>=bombx+edgex+bomby+edgey:
+                            if bombTimer>12:
                                 return True
         return False
     
